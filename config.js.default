@@ -1,0 +1,6 @@
+// Add API key below and domain and rename to config.js
+
+module.exports = {
+    api_key: 'PUT YOUR API KEY HERE',
+    domain:  'PUT YOUR DOMAIN HERE'
+};
