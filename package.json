@@ -4,6 +4,9 @@
   "dependencies": {
     "express": "^4.13.3",
     "body-parser": "^1.14.1",
-    "mailgun-js": "^0.7.7"
+    "mailgun-js": "^0.7.7",
+    "express-recaptcha": "^2.0.0",
+    "validator": "^4.4.0",
+    "es6-template-strings": "^2.0.0"
   }
 }

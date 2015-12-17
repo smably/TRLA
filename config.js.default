@@ -2,5 +2,9 @@
 
 module.exports = {
     api_key: 'PUT YOUR API KEY HERE',
-    domain:  'PUT YOUR DOMAIN HERE'
+    domain:  'PUT YOUR DOMAIN HERE',
+    recaptcha: {
+        site_key: 'PUT YOUR RECAPTCHA SITE KEY HERE',
+        secret_key: 'PUT YOUR RECAPTCHA SECRET KEY HERE'
+    }
 };

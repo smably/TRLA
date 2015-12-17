@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>Support the Relief Line | Toronto Relief Line Alliance</title>
+
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous" />
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap-theme.min.css" integrity="sha384-fLW2N01lMqjakBkx3l/M9EahuwpSfeNvV63J5ezn3uZzapT0u7EYsXMjQV+0En5r" crossorigin="anonymous" />
+    <link rel="stylesheet" type="text/css" href="email-form.css" />
+  </head>
+  <body>
+    <script src="//code.jquery.com/jquery-1.11.3.min.js"></script>
+    <script src='https://www.google.com/recaptcha/api.js'></script>
+    <script>
+$(document).ready(function() {
+  $('#contact').submit(function(event) {
+    // TODO validate all form data and check that ReCAPTCHA was completed
+
+    $.post('/message/send', $("#contact").serialize(), function() { console.log("success?"); })
+      .done(function() { console.log("done?"); })
+      .fail(function() { console.log("caca!"); });
+    // TODO show banner for success or failure
+
+    event.preventDefault();
+  });
+});
+    </script>
+
+    <div class="container" style="max-width: 750px;">
+      <h1>Support the Relief Line</h1>
+      <p>Show your support for the Relief Line by sending a message to your elected representatives.</p>
+
+      <form method="POST" action="/message/send" id="contact">
+        <div class="row">
+          <div class="col-sm-6">
+            <div class="form-group">
+              <label for="contact-firstName">First Name:</label>
+              <input type="text" class="form-control" name="firstName" id="contact-firstName" required />
+            </div>
+          </div>
+          <div class="col-sm-6">
+            <div class="form-group">
+              <label for="contact-lastName">Last Name:</label>
+              <input type="text" class="form-control" name="lastName" id="contact-lastName" required />
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-sm-6">
+            <div class="form-group">
+              <label for="contact-email">Email:</label>
+              <input type="email" class="form-control" name="email" id="contact-email" required />
+            </div>
+          </div>
+          <div class="col-sm-6">
+            <div class="form-group">
+              <label for="contact-postalcode">Postal Code:</label>
+              <input type="text" class="form-control" name="email" id="contact-postalcode" required pattern="[a-zA-Z]\d[a-zA-Z]\s*\d[a-zA-Z]\d" />
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-sm-12">
+            <div class="form-group">
+              <label for="contact-message">Message:</label>
+              <textarea class="form-control" name="message" id="contact-message" rows="10" required>Shabby chic helvetica offal truffaut craft beer blue bottle wolf sustainable XOXO chicharrones. Synth venmo kogi photo booth pickled, offal ethical vinyl migas. Bushwick try-hard austin, art party bespoke whatever fingerstache DIY semiotics humblebrag heirloom chia bicycle rights. Thundercats scenester twee four dollar toast, cred godard trust fund synth vice +1. VHS affogato green juice cliche, photo booth health goth everyday carry roof party vegan austin. Four loko raw denim jean shorts, biodiesel pinterest cardigan celiac meh iPhone. Pop-up flannel affogato leggings.
+
+Intelligentsia kinfolk 8-bit cray chambray selfies. Normcore kitsch bitters ennui iPhone. Pitchfork listicle poutine, fashion axe normcore photo booth jean shorts brooklyn knausgaard umami meditation four dollar toast ethical PBR&B. Four loko bitters pop-up affogato gastropub, lumbersexual cray readymade waistcoat XOXO narwhal godard. 90's art party semiotics kogi green juice. Viral food truck VHS mumblecore paleo. Franzen godard deep v, shabby chic asymmetrical actually YOLO green juice +1 try-hard tote bag poutine.</textarea>
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-sm-12">
+            <div class="g-recaptcha" data-sitekey="6LcXwxITAAAAAH3Xg12Mi2zWJnGt72jDFx-yPxsK"></div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-sm-12">
+              <div class="checkbox">
+                <label>
+                  <input type="checkbox" name="contact-newsletter"> Please send me occasional email updates from the Toronto Relief Line Alliance
+                </label>
+                <label>
+                  <input type="checkbox" name="contact-volunteer"> I'm interested in volunteering to support the Relief Line
+                </label>
+              </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-sm-12">
+            <button class="btn btn-default" id="contact-preview">Preview Message</button>
+            <button type="submit" class="btn btn-primary" id="contact-submit">Send Message</button>
+          </div>
+        </div>
+      </form>
+    </div>
+
+  </body>
+</html>
