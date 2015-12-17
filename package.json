@@ -7,6 +7,8 @@
     "mailgun-js": "^0.7.7",
     "express-recaptcha": "^2.0.0",
     "validator": "^4.4.0",
-    "es6-template-strings": "^2.0.0"
+    "es6-template-strings": "^2.0.0",
+    "superagent": "^1.6.1",
+    "node-slack": "0.0.7"
   }
 }

@@ -13,36 +13,51 @@
     <script src="//code.jquery.com/jquery-1.11.3.min.js"></script>
     <script src='https://www.google.com/recaptcha/api.js'></script>
     <script>
+
 $(document).ready(function() {
   $('#contact').submit(function(event) {
     // TODO validate all form data and check that ReCAPTCHA was completed
+    // TODO show preview if preview button clicked
 
-    $.post('/message/send', $("#contact").serialize(), function() { console.log("success?"); })
-      .done(function() { console.log("done?"); })
-      .fail(function() { console.log("caca!"); });
-    // TODO show banner for success or failure
+    $('#contact-submit').prop('disabled', true);
+
+    $.post('/message/send', $("#contact").serialize())
+      .done(function() {
+        // TODO use success message returned from backend
+        $('#contact-status').text('Success!').removeClass('alert-danger').addClass('alert-success').show();
+      })
+      .fail(function() {
+        // TODO use error message returned from backend
+        $('#contact-status').text('Failure!').addClass('alert-success').show();
+        $('#contact-submit').prop('disabled', false);
+      })
+      .always(function() {
+        $("html, body").animate({ scrollTop: 0 }, "fast");
+      });
 
     event.preventDefault();
   });
 });
+
     </script>
 
     <div class="container" style="max-width: 750px;">
+      <div id="contact-status" class="alert" role="alert" style="display: none;"></div>
       <h1>Support the Relief Line</h1>
-      <p>Show your support for the Relief Line by sending a message to your elected representatives.</p>
+      <p>Show your support for the Relief Line by sending a message to your elected representatives. Your message will be sent to Mayor Tory, all 44 members of council, and Chief Planner Jennifer Keesmaat.</p>
 
       <form method="POST" action="/message/send" id="contact">
         <div class="row">
           <div class="col-sm-6">
             <div class="form-group">
-              <label for="contact-firstName">First Name:</label>
-              <input type="text" class="form-control" name="firstName" id="contact-firstName" required />
+              <label for="contact-firstname">First Name:</label>
+              <input type="text" class="form-control" name="firstname" id="contact-firstname" required />
             </div>
           </div>
           <div class="col-sm-6">
             <div class="form-group">
-              <label for="contact-lastName">Last Name:</label>
-              <input type="text" class="form-control" name="lastName" id="contact-lastName" required />
+              <label for="contact-lastname">Last Name:</label>
+              <input type="text" class="form-control" name="lastname" id="contact-lastname" required />
             </div>
           </div>
         </div>
@@ -56,7 +71,7 @@ $(document).ready(function() {
           <div class="col-sm-6">
             <div class="form-group">
               <label for="contact-postalcode">Postal Code:</label>
-              <input type="text" class="form-control" name="email" id="contact-postalcode" required pattern="[a-zA-Z]\d[a-zA-Z]\s*\d[a-zA-Z]\d" />
+              <input type="text" class="form-control" name="postalcode" id="contact-postalcode" required pattern="[a-zA-Z]\d[a-zA-Z]\s*\d[a-zA-Z]\d" />
             </div>
           </div>
         </div>
@@ -79,17 +94,17 @@ Intelligentsia kinfolk 8-bit cray chambray selfies. Normcore kitsch bitters ennu
           <div class="col-sm-12">
               <div class="checkbox">
                 <label>
-                  <input type="checkbox" name="contact-newsletter"> Please send me occasional email updates from the Toronto Relief Line Alliance
+                  <input type="checkbox" name="newsletter" id="contact-newsletter"> Please send me occasional email updates from the Toronto Relief Line Alliance
                 </label>
                 <label>
-                  <input type="checkbox" name="contact-volunteer"> I'm interested in volunteering to support the Relief Line
+                  <input type="checkbox" name="lawnsign" id="contact-lawnsign"> I'm interested in receiving a free lawn sign to show my support for the Relief Line
                 </label>
               </div>
           </div>
         </div>
         <div class="row">
           <div class="col-sm-12">
-            <button class="btn btn-default" id="contact-preview">Preview Message</button>
+            <button class="btn btn-default" id="contact-preview" style="display: none;">Preview Message</button>
             <button type="submit" class="btn btn-primary" id="contact-submit">Send Message</button>
           </div>
         </div>
