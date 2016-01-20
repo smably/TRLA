@@ -37,11 +37,27 @@ $(document).ready(function() {
 
     event.preventDefault();
   });
+
+  $('#contact-lawnsign').change(function() {
+    toggleAddressInput(this.checked);
+  });
+
+  // Make sure lawn sign info is initialized hidden
+  $('#lawnsign-info').hide();
 });
 
+function toggleAddressInput(checked) {
+  if (checked) {
+    $('#contact-address,#contact-city').prop('required', true);
+    $('#lawnsign-info').slideDown('fast');
+  } else {
+    $('#lawnsign-info').slideUp('fast');
+    $('#contact-address,#contact-city').prop('required', false);
+  }
+}
     </script>
 
-    <div class="container" style="max-width: 750px;">
+    <div class="container" style="max-width: 750px; margin-bottom: 20px;">
       <div id="contact-status" class="alert" role="alert" style="display: none;"></div>
       <h1>Support the Relief Line</h1>
       <p>Show your support for the Relief Line by sending a message to your elected representatives. Your message will be sent to Mayor Tory, all 44 members of council, and Chief Planner Jennifer Keesmaat.</p>
@@ -87,11 +103,6 @@ Intelligentsia kinfolk 8-bit cray chambray selfies. Normcore kitsch bitters ennu
         </div>
         <div class="row">
           <div class="col-sm-12">
-            <div class="g-recaptcha" data-sitekey="6LcXwxITAAAAAH3Xg12Mi2zWJnGt72jDFx-yPxsK"></div>
-          </div>
-        </div>
-        <div class="row">
-          <div class="col-sm-12">
               <div class="checkbox">
                 <label>
                   <input type="checkbox" name="newsletter" id="contact-newsletter"> Please send me occasional email updates from the Toronto Relief Line Alliance
@@ -100,6 +111,34 @@ Intelligentsia kinfolk 8-bit cray chambray selfies. Normcore kitsch bitters ennu
                   <input type="checkbox" name="lawnsign" id="contact-lawnsign"> I'm interested in receiving a free lawn sign to show my support for the Relief Line
                 </label>
               </div>
+          </div>
+        </div>
+        <div id="lawnsign-info">
+          <div class="row">
+            <div class="col-sm-12">
+              <p>We appreciate your support! Please complete the form below with your address and we will place a sign on your front lawn, free of charge.</p>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-sm-8">
+              <div class="form-group">
+                <label for="contact-address">Street Address:</label>
+                <input type="text" class="form-control" name="address" id="contact-address" />
+              </div>
+            </div>
+            <div class="col-sm-4">
+              <div class="form-group">
+                <label for="contact-city">City:</label>
+                <input type="text" class="form-control" name="city" id="contact-city" />
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-sm-12">
+            <div class="form-group">
+              <div class="g-recaptcha" data-sitekey="6LcXwxITAAAAAH3Xg12Mi2zWJnGt72jDFx-yPxsK"></div>
+            </div>
           </div>
         </div>
         <div class="row">

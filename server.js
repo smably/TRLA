@@ -56,44 +56,71 @@ function sendEmail(req, res) {
 
     if (!validator.isEmail(req.body.email)) {
         error(res, 'Error: email is invalid.');
+        return;
     }
 
     if (!/^[a-zA-Z]\d[a-zA-Z]\s*\d[a-zA-Z]\d$/.test(req.body.postalcode)) {
         error(res, 'Error: postal code is invalid.');
+        return;
     }
 
-    var data = {
+    if (req.body.lawnsign && !(req.body.address && req.body.city)) {
+        error(res, "Error: address and city are required to request a lawn sign.");
+        return;
+    }
+
+    /* ================================================= */
+
+    var vars = {
+        postalCode: req.body.postalcode,
+        lawnsign: !!req.body.lawnsign
+    };
+
+    if (vars.lawnsign) {
+        vars.address = req.body.address;
+        vars.city = req.body.city;
+    }
+
+    var user = {
+        subscribed: !!req.body.newsletter,
+        address: req.body.email,
+        name: req.body.firstname + " " + req.body.lastname,
+        vars: vars
+    };
+
+    var header = "Dear %recipient_name%,\n\n";
+    var footer = "\n\nSincerely,\n\n" + user.name + "\n" + req.body.postalcode;         // TODO template
+
+    var mailData = {
         from: template('${firstName} ${lastName} <${email}>', { firstName: req.body.firstname, lastName: req.body.lastname, email: req.body.email }),
         to: 'test@mail.relieflinealliance.ca',
         subject: 'I support the relief line',
-        text: req.body.message
+        text: header + req.body.message + footer
     };
 
-    mailgun.messages().send(data, function (error, body) {
-        if (error) {
-            res.json({ message: 'Error: could not send message.' });
+    /* ================================================= */
+
+    mailgun.lists('supporters@mail.relieflinealliance.ca').members().create(user, function (err, data) {
+        if (err) {
+            error(res, 'Error: you have already sent a message from this email address.');
         } else {
-            console.log("Message sent. Got response from mailgun:\n", body);
-
-            var user = {
-                subscribed: !!req.body.newsletter,
-                address: req.body.email,
-                name: req.body.firstname + " " + req.body.lastname,
-                vars: {
-                    postalCode: req.body.postalcode,
-                    lawnsign: !!req.body.lawnsign
-                }
-            };
-
-            mailgun.lists('newsletter@mail.relieflinealliance.ca').members().create(user, function (err, data) {
+            mailgun.messages().send(mailData, function (err, body) {
                 if (err) {
-                    console.log(err, data);
+                    error(res, 'Error: could not send message.');
+                    console.log("Got failure from Mailgun:", err);
+                } else {
+                    console.log("Message sent. Got response from mailgun:\n", body);
+
+                    slack.send({ text: template('*From:* ${from}\n*Message:* ${text}\n*Newsletter:* ${newsletter}\n*Lawn sign:* ${lawnsign}', {
+                        from: mailData.from,
+                        text: mailData.text,
+                        newsletter: user.subscribed ? "yes" : "no",
+                        lawnsign: vars.lawnsign ? vars.address + ", " + vars.city : "no"
+                    }) });
+
+                    res.json({ message: 'Message sent!' });
                 }
             });
-
-            slack.send({ text: template('*From:* ${from}\n*Message:* ${text}', data) });
-
-            res.json({ message: 'Message sent!' });
         }
     });
 }
