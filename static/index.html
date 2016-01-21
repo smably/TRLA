@@ -21,7 +21,7 @@ $(document).ready(function() {
 
     $('#contact-submit').prop('disabled', true);
 
-    $.post('/message/send', $("#contact").serialize())
+    $.post($("#contact").attr("action"), $("#contact").serialize())
       .done(function() {
         // TODO use success message returned from backend
         $('#contact-status').text('Success!').removeClass('alert-danger').addClass('alert-success').show();
