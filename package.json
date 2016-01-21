@@ -9,6 +9,6 @@
     "validator": "^4.4.0",
     "es6-template-strings": "^2.0.0",
     "superagent": "^1.6.1",
-    "node-slack": "0.0.7"
+    "slack-node": "^0.1.7"
   }
 }

@@ -6,7 +6,7 @@ var bodyParser = require('body-parser');
 var recaptcha  = require('express-recaptcha');
 var validator  = require('validator');
 var template   = require('es6-template-strings');
-var Slack      = require('node-slack');
+var Slack      = require('slack-node');
 var mailgun    = require('mailgun-js')({ apiKey: config.mailgun.api_key, domain: config.mailgun.domain });
 
 app.use(express.static('static'));
@@ -15,7 +15,8 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
 recaptcha.init(config.recaptcha.site_key, config.recaptcha.secret_key);
-var slack = new Slack(config.slack.hook_url);
+var slack = new Slack();
+slack.setWebhook(config.slack.hook_url);
 
 var port = process.env.PORT || 8090;
 
@@ -111,7 +112,7 @@ function sendEmail(req, res) {
                 } else {
                     console.log("Message sent. Got response from mailgun:\n", body);
 
-                    slack.send({ text: template('*From:* ${from}\n*Message:* ${text}\n*Newsletter:* ${newsletter}\n*Lawn sign:* ${lawnsign}', {
+                    slack.webhook({ text: template('*From:* ${from}\n*Message:* ${text}\n*Newsletter:* ${newsletter}\n*Lawn sign:* ${lawnsign}', {
                         from: mailData.from,
                         text: mailData.text,
                         newsletter: user.subscribed ? "yes" : "no",
